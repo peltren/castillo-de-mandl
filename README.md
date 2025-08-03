@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# El Castillo de Mandl
+
+Website for El Castillo de Mandl hotel and resort located in La Cumbre, Córdoba, Argentina.
 
 ## Getting Started
 
@@ -6,31 +8,86 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `src/pages/` - All page components
+- `src/styles/` - Global styles
+- `public/images/` - Static images and assets
 
-## Learn More
+## Technologies Used
 
-To learn more about Next.js, take a look at the following resources:
+- Next.js 15
+- React 19
+- Tailwind CSS 4
+- ESLint
+- SendGrid (for email functionality)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Multilingual Support**: Spanish and English translations
+- **Contact Form**: Functional contact form with email sending capability
+- **Responsive Design**: Mobile-first responsive design
+- **Image Gallery**: Interactive image carousels
+- **Room Categories**: Detailed suite information and photos
 
-## Deploy on Vercel
+## Development
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The project uses the Pages Router pattern of Next.js with Tailwind CSS for styling.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Email Configuration
+
+For the contact form to send emails automatically, you need to configure SendGrid:
+
+### SendGrid Setup (Recommended)
+
+1. **Create a SendGrid account:**
+
+   - Go to [SendGrid](https://sendgrid.com) and create a free account
+   - Verify your domain or use a verified email
+
+2. **Get API Key:**
+
+   - Go to Settings > API Keys in your SendGrid dashboard
+   - Create a new API Key with "Mail Send" permissions
+
+3. **Configure environment variables:**
+   - Create a `.env.local` file in the project root
+   - Add the following variables:
+
+```env
+SENDGRID_API_KEY=your_sendgrid_api_key_here
+FROM_EMAIL=noreply@elcastillodemandl.com
+TO_EMAIL=reservas@elcastillodemandl.com
+```
+
+4. **Verify domain (optional but recommended):**
+   - In SendGrid, go to Settings > Sender Authentication
+   - Verify your domain to improve email delivery
+
+### Manual Fallback
+
+If SendGrid is not configured, the form will work with a fallback that:
+
+- Processes form data
+- Opens the user's email client with a pre-filled message
+- Allows manual sending
+
+### Testing
+
+To test the contact form:
+
+1. Run the development server: `npm run dev`
+2. Go to the contact page
+3. Fill out the form and submit
+4. Verify that you receive the email or your email client opens
+
+### Important Notes
+
+- The email `noreply@elcastillodemandl.com` must be verified in SendGrid
+- For production, consider using a verified domain
+- Emails are sent to `reservas@elcastillodemandl.com`
+- The form includes validation for required fields

@@ -1,0 +1,30 @@
+/* Swiper Carousel Custom Styles */
+
+.swiper-pagination-bullet {
+	background: #d1d5db !important;
+	opacity: 1 !important;
+	width: 0.5rem !important;
+	height: 0.5rem !important;
+	margin: 0 0.25rem !important;
+}
+
+.swiper-pagination-bullet-active {
+	background: #15803d !important;
+}
+
+/* Ensure pagination is always below content */
+.swiper-pagination {
+	position: static !important;
+	margin-top: 1rem !important;
+	display: flex !important;
+	justify-content: center !important;
+	align-items: center !important;
+}
+
+@media (min-width: 640px) {
+	.swiper-pagination-bullet {
+		width: 0.75rem !important;
+		height: 0.75rem !important;
+		margin: 0 0.5rem !important;
+	}
+}

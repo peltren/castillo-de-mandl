@@ -1,0 +1,64 @@
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Poppins:wght@300;400;500;600;700&display=swap");
+@import "tailwindcss";
+
+/* Base typography settings */
+html {
+	font-family: "Poppins", system-ui, sans-serif;
+}
+
+/* Serif headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: "Merriweather", Georgia, serif;
+	font-weight: 400;
+}
+
+/* Enhanced description styles for better visibility */
+.description-text {
+	font-family: "Poppins", system-ui, sans-serif;
+	font-weight: 400;
+	font-size: 1.125rem;
+	line-height: 1.75;
+	letter-spacing: 0.025em;
+	color: #374151;
+}
+
+/* Alternative serif option for descriptions */
+.description-serif {
+	font-family: "Merriweather", Georgia, serif;
+	font-weight: 300;
+	font-size: 1.125rem;
+	line-height: 1.75;
+	letter-spacing: 0.025em;
+	color: #374151;
+}
+
+/* Prevent horizontal scrolling on mobile */
+html,
+body {
+	overflow-x: hidden;
+	max-width: 100vw;
+}
+
+/* Ensure proper container behavior */
+.container {
+	max-width: 100%;
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+
+/* Mobile-first responsive adjustments */
+@media (max-width: 640px) {
+	.swiper-container {
+		overflow: hidden;
+	}
+}
+
+/* Indented paragraph style for descriptions */
+.text-indented {
+	text-indent: 2rem;
+}
