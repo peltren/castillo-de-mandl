@@ -1,4 +1,4 @@
-import sgMail from "@sendgrid/mail";
+import nodemailer from "nodemailer";
 
 export default async function handler(req, res) {
 	if (req.method !== "POST") {
@@ -6,52 +6,80 @@ export default async function handler(req, res) {
 	}
 
 	try {
-		const { name, surname, email, phone, consult } = req.body;
+		const { fullName, email, phone, consult } = req.body;
 
 		// Validate required fields
-		if (!name || !surname || !email || !consult) {
-			return res.status(400).json({ message: "Missing required fields" });
+		if (!fullName || !email || !consult) {
+			return res.status(400).json({
+				success: false,
+				message: "Por favor completa todos los campos obligatorios",
+			});
 		}
 
-		const subject = `Nueva consulta de ${name} ${surname}`;
+		const subject = `Nueva consulta de ${fullName}`;
 		const emailContent = `
-      Nueva consulta recibida desde el sitio web:
-      
-      Nombre: ${name} ${surname}
-      Email: ${email}
-      Teléfono: ${phone || "No proporcionado"}
-      
-      Consulta:
-      ${consult}
-      
-      ---
-      Enviado desde el formulario de contacto de El Castillo de Mandl
+Nueva consulta recibida desde el sitio web:
+
+Nombre: ${fullName}
+Email: ${email}
+Teléfono: ${phone || "No proporcionado"}
+
+Consulta:
+${consult}
+
+---
+Enviado desde el formulario de contacto de El Castillo de Mandl
     `;
 
 		// Log the submission
 		console.log("Contact form submission:", {
-			name,
-			surname,
+			fullName,
 			email,
 			phone,
 			consult,
 			timestamp: new Date().toISOString(),
 		});
 
-		// Try to send email via SendGrid if configured
-		const sendGridApiKey = process.env.SENDGRID_API_KEY;
-		if (sendGridApiKey) {
+		// SMTP configuration
+		const smtpConfig = {
+			host: process.env.SMTP_HOST,
+			port: parseInt(process.env.SMTP_PORT) || 465,
+			secure: process.env.SMTP_SECURE === "true",
+			auth: {
+				user: process.env.SMTP_USER,
+				pass: process.env.SMTP_PASS,
+			},
+			tls: {
+				rejectUnauthorized: false,
+			},
+		};
+
+		// Try to send email via SMTP if configured
+		if (
+			process.env.SMTP_HOST &&
+			process.env.SMTP_USER &&
+			process.env.SMTP_PASS
+		) {
 			try {
-				sgMail.setApiKey(sendGridApiKey);
-				await sgMail.send({
-					to: "reservas@elcastillodemandl.com",
-					from: "noreply@elcastillodemandl.com",
+				// Create transporter
+				const transporter = nodemailer.createTransport(smtpConfig);
+
+				// Verify connection configuration
+				await transporter.verify();
+
+				// Send email
+				await transporter.sendMail({
+					from: `"${fullName}" <${
+						process.env.SMTP_FROM || process.env.SMTP_USER
+					}>`,
+					to: "info@elcastillodemandl.com",
+					replyTo: email,
 					subject: subject,
 					text: emailContent,
 					html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
               <h2 style="color: #333;">Nueva consulta recibida</h2>
-              <p><strong>Nombre:</strong> ${name} ${surname}</p>
+              <p><strong>Nombre:</strong> ${fullName}</p>
               <p><strong>Email:</strong> ${email}</p>
               <p><strong>Teléfono:</strong> ${phone || "No proporcionado"}</p>
               <p><strong>Consulta:</strong></p>
@@ -66,31 +94,39 @@ export default async function handler(req, res) {
           `,
 				});
 
+				console.log("Email sent successfully via SMTP");
+
 				return res.status(200).json({
 					success: true,
-					message: "Mensaje enviado correctamente",
+					message: "¡Mensaje enviado correctamente! Te contactaremos pronto.",
 				});
-			} catch (sendGridError) {
-				console.error("SendGrid error:", sendGridError);
+			} catch (smtpError) {
+				console.error("SMTP error:", smtpError);
+
+				// Return error message to user
+				return res.status(500).json({
+					success: false,
+					message:
+						"Error al enviar el mensaje. Por favor intenta nuevamente o contáctanos directamente.",
+				});
 			}
 		}
 
-		// Fallback: Create mailto link
-		const mailtoLink = `mailto:reservas@elcastillodemandl.com?subject=${encodeURIComponent(
-			subject
+		// Fallback: Create mailto link if SMTP is not configured
+		const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(
+			`Re: ${subject}`
 		)}&body=${encodeURIComponent(emailContent)}`;
 
 		return res.status(200).json({
 			success: true,
-			message:
-				"Mensaje procesado. Se abrirá tu cliente de correo para enviar el mensaje.",
+			message: "Se abrirá tu cliente de correo para enviar el mensaje.",
 			mailtoLink,
 		});
 	} catch (error) {
 		console.error("Error processing contact form:", error);
-		res.status(500).json({
+		return res.status(500).json({
 			success: false,
-			message: "Error al procesar el formulario",
+			message: "Error interno del servidor. Por favor intenta nuevamente.",
 		});
 	}
 }

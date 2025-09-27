@@ -8,8 +8,7 @@ export default function Contact() {
 	const { t } = useTranslations();
 	const router = useRouter();
 	const [formData, setFormData] = useState({
-		name: "",
-		surname: "",
+		fullName: "",
 		email: "",
 		phone: "",
 		consult: "",
@@ -45,8 +44,7 @@ export default function Contact() {
 				setSubmitStatus({ type: "success", message: t.formSuccessMessage });
 				// Reset form after successful submission
 				setFormData({
-					name: "",
-					surname: "",
+					fullName: "",
 					email: "",
 					phone: "",
 					consult: "",
@@ -175,43 +173,23 @@ export default function Contact() {
 								{t.contactFormTitle}
 							</h2>
 							<form onSubmit={handleSubmit} className="space-y-6">
-								<div className="grid md:grid-cols-2 gap-4">
-									<div>
-										<label
-											htmlFor="name"
-											className="block text-sm font-medium text-gray-700 mb-2 font-sans"
-										>
-											{t.nameLabel} *
-										</label>
-										<input
-											type="text"
-											id="name"
-											name="name"
-											value={formData.name}
-											onChange={handleInputChange}
-											required
-											className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors font-sans"
-											placeholder="Your name"
-										/>
-									</div>
-									<div>
-										<label
-											htmlFor="surname"
-											className="block text-sm font-medium text-gray-700 mb-2 font-sans"
-										>
-											{t.surnameLabel} *
-										</label>
-										<input
-											type="text"
-											id="surname"
-											name="surname"
-											value={formData.surname}
-											onChange={handleInputChange}
-											required
-											className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors font-sans"
-											placeholder="Your surname"
-										/>
-									</div>
+								<div>
+									<label
+										htmlFor="fullName"
+										className="block text-sm font-medium text-gray-700 mb-2 font-sans"
+									>
+										{t.fullNameLabel} *
+									</label>
+									<input
+										type="text"
+										id="fullName"
+										name="fullName"
+										value={formData.fullName}
+										onChange={handleInputChange}
+										required
+										className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors font-sans"
+										placeholder="Your full name"
+									/>
 								</div>
 
 								<div>

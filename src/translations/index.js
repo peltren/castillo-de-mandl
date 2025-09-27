@@ -173,8 +173,7 @@ export const translations = {
 
 		// Contact form fields
 		contactFormTitle: "Send us a message",
-		nameLabel: "Name",
-		surnameLabel: "Surname",
+		fullNameLabel: "Full Name",
 		emailLabel: "Email",
 		phoneLabel: "Phone",
 		consultLabel: "Consult",
@@ -407,8 +406,7 @@ export const translations = {
 
 		// Contact form fields
 		contactFormTitle: "Envíanos un mensaje",
-		nameLabel: "Nombre",
-		surnameLabel: "Apellido",
+		fullNameLabel: "Nombre Completo",
 		emailLabel: "Email",
 		phoneLabel: "Teléfono",
 		consultLabel: "Consulta",
