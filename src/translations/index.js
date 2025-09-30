@@ -188,6 +188,7 @@ export const translations = {
 		addressLabel: "Address",
 		emailInfoLabel: "Email",
 		instagramLabel: "Instagram",
+		whatsappLabel: "WhatsApp",
 		addressText: "San Josemaría Escrivá 73 (5178)",
 		addressCity: "La Cumbre, Córdoba, Argentina",
 
@@ -420,6 +421,7 @@ export const translations = {
 		addressLabel: "Dirección",
 		emailInfoLabel: "Email",
 		instagramLabel: "Instagram",
+		whatsappLabel: "WhatsApp",
 		addressText: "San Josemaría Escrivá 73 (5178)",
 		addressCity: "La Cumbre, Córdoba, Argentina",
 
