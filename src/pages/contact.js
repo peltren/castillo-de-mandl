@@ -3,6 +3,7 @@ import { useTranslations } from "../hooks/useTranslations";
 import { useState } from "react";
 import PageHeader from "../components/PageHeader";
 import { useRouter } from "next/router";
+import API_CONFIG from "../config/api";
 
 export default function Contact() {
 	const { t } = useTranslations();
@@ -29,43 +30,60 @@ export default function Contact() {
 		setIsSubmitting(true);
 		setSubmitStatus(null);
 
-		try {
-			const response = await fetch("/api/contact", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(formData),
+		// Validate required fields
+		if (!formData.fullName || !formData.email || !formData.consult) {
+			setSubmitStatus({
+				type: "error",
+				message: "Por favor completa todos los campos obligatorios",
 			});
+			setIsSubmitting(false);
+			return;
+		}
+
+		try {
+			// Llamar al backend en Vercel
+			const response = await fetch(
+				`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SEND_EMAIL}`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(formData),
+				}
+			);
 
 			const result = await response.json();
 
 			if (result.success) {
-				setSubmitStatus({ type: "success", message: t.formSuccessMessage });
-				// Reset form after successful submission
+				setSubmitStatus({
+					type: "success",
+					message: "¡Mensaje enviado correctamente! Te contactaremos pronto.",
+				});
+
+				// Reset form
 				setFormData({
 					fullName: "",
 					email: "",
 					phone: "",
 					consult: "",
 				});
-
-				// Open email client with pre-filled content
-				if (result.mailtoLink) {
-					window.open(result.mailtoLink, "_blank");
-				}
 			} else {
 				setSubmitStatus({
 					type: "error",
-					message: result.message || "Error al enviar el mensaje",
+					message:
+						result.message || "Error al enviar el mensaje. Inténtalo de nuevo.",
 				});
 			}
 		} catch (error) {
-			console.error("Error submitting form:", error);
-			setSubmitStatus({ type: "error", message: t.errorMessage });
-		} finally {
-			setIsSubmitting(false);
+			console.error("Error:", error);
+			setSubmitStatus({
+				type: "error",
+				message: "Error de conexión. Inténtalo de nuevo más tarde.",
+			});
 		}
+
+		setIsSubmitting(false);
 	};
 
 	return (

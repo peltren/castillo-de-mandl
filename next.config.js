@@ -1,13 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	i18n: {
-		locales: ["en", "es"],
-		defaultLocale: "en",
-		localeDetection: false,
-	},
 	images: {
 		unoptimized: true,
 	},
+	output: "export",
+	trailingSlash: true,
 };
 
 module.exports = nextConfig;
