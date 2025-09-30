@@ -3,7 +3,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 const LanguageContext = createContext();
 
 export function LanguageProvider({ children }) {
-	const [language, setLanguage] = useState("en");
+	const [language, setLanguage] = useState("es");
 
 	useEffect(() => {
 		// Check if there's a saved language preference in localStorage
